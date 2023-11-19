@@ -25,6 +25,29 @@ SNAKE_DEFAULT_SPEED = 15
 font_style = pygame.font.SysFont("bahnschrift", 25)
 score_font = pygame.font.SysFont("comicsansms", 35)
 
+food_collection = [
+    {
+        "is_power_up": False,
+        "image": "assets/cherry.png"
+    },
+    {
+        "is_power_up": True,
+        "image": "assets/carrot.png"
+    },
+    {
+        "is_power_up": False,
+        "image": "assets/orange.png"
+    },
+    {
+        "is_power_up": False,
+        "image": "assets/strawberry.png"
+    },
+    {
+        "is_power_up": False,
+        "image": "assets/watermelon.png"
+    }
+]
+
 
 def show_score_level(score, the_level):
     value = score_font.render("Score: {} Level: {}".format(str(score), the_level), True, yellow)
@@ -45,6 +68,9 @@ def game_loop(game_level, game_score):  # creating a function
     game_over = False
     game_close = False
     eaten_food = 0
+    power_up_on = False
+    food_index = random.randint(0, len(food_collection) - 1)
+    image_path = food_collection[food_index]["image"]
 
     x1 = dis_width / 2
     y1 = dis_height / 2
@@ -103,12 +129,25 @@ def game_loop(game_level, game_score):  # creating a function
                     x1_change = 0
 
         if x1 >= dis_width or x1 < 0 or y1 >= dis_height or y1 < 0:
-            game_close = True
+            if power_up_on:
+                # power up implemented
+                if x1 >= dis_width:
+                    x1 -= dis_width
+                if x1 < 0:
+                    x1 += dis_width
+                if y1 < 0:
+                    y1 += dis_height
+                if y1 >= dis_height:
+                    y1 -= dis_height
+            else:
+                game_close = True
 
         x1 += x1_change
         y1 += y1_change
         dis.fill(blue)
-        pygame.draw.rect(dis, green, [food_x, food_y, snake_block, snake_block])
+
+        dis.blit(pygame.image.load(image_path).convert_alpha(),
+                 (food_x, food_y))
 
         snake_head = [x1, y1]
         snake_list.append(snake_head)
@@ -132,6 +171,13 @@ def game_loop(game_level, game_score):  # creating a function
             length_of_snake += 1
             eaten_food += 1
             game_score += 1
+
+            if not power_up_on:
+                power_up_on = food_collection[food_index]["is_power_up"]
+
+            food_index = random.randint(0, len(food_collection) - 1)
+            # random pick from food collection
+            image_path = food_collection[food_index]["image"]
 
         clock.tick(SNAKE_DEFAULT_SPEED + 5 * game_level)
 
