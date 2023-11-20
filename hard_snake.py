@@ -11,16 +11,17 @@ red = (213, 50, 80)
 green = (0, 255, 0)
 blue = (50, 153, 213)
 
-dis_width = 600
-dis_height = 400
+dis_width = 1200
+dis_height = 800
 
 dis = pygame.display.set_mode((dis_width, dis_height))
 pygame.display.set_caption(title)
 
 clock = pygame.time.Clock()
 
-snake_block = 10
-SNAKE_DEFAULT_SPEED = 15
+snake_block = 20
+SNAKE_DEFAULT_SPEED = 10
+FOODS_PER_LEVEL = 10
 
 font_style = pygame.font.SysFont("bahnschrift", 25)
 score_font = pygame.font.SysFont("comicsansms", 35)
@@ -81,12 +82,15 @@ def game_loop(game_level, game_score):  # creating a function
     snake_list = []
     length_of_snake = 1
 
-    food_x = round(random.randrange(0, dis_width - snake_block) / 10.0) * 10.0
-    food_y = round(random.randrange(0, dis_height - snake_block) / 10.0) * 10.0
+    #food_x = round(random.randrange(0, dis_width - snake_block) / 10.0) * 10.0
+    #food_y = round(random.randrange(0, dis_height - snake_block) / 10.0) * 10.0
+
+    food_x = random.choice(range(0, dis_width - snake_block, snake_block))
+    food_y = random.choice(range(0, dis_height - snake_block, snake_block))
 
     while not game_over:
 
-        while eaten_food == 5:
+        while eaten_food == FOODS_PER_LEVEL:
             dis.fill(blue)
             message("Good job! Press C to continue ...", green)
             show_score_level(game_score, game_level)
@@ -166,8 +170,8 @@ def game_loop(game_level, game_score):  # creating a function
 
         if x1 == food_x and y1 == food_y:
             # it caught a food
-            food_x = round(random.randrange(0, dis_width - snake_block) / 10.0) * 10.0
-            food_y = round(random.randrange(0, dis_height - snake_block) / 10.0) * 10.0
+            food_x = random.choice(range(0, dis_width - snake_block, snake_block))
+            food_y = random.choice(range(0, dis_height - snake_block, snake_block))
             length_of_snake += 1
             eaten_food += 1
             game_score += 1
