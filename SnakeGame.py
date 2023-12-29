@@ -73,6 +73,7 @@ class SnakeGame:
         self.image_path = None
         self.eaten_food = 0
         self.game_score = 0
+        self.food_catch_sound = pygame.mixer.Sound("assets/sound/food_catch.wav")
 
     def play_level(self):
         self.reset_positions()
@@ -112,6 +113,7 @@ class SnakeGame:
 
             # check caught food
             if self.caught_food():
+                pygame.mixer.Sound.play(self.food_catch_sound)
                 self.handle_caught_food()
                 self.spawn_food()
 
