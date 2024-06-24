@@ -24,6 +24,7 @@ SNAKE_CANVAS_YI = 2 * SNAKE_BLOCK
 SNAKE_CANVAS_YF = DISPLAY_HEIGHT
 
 
+
 class SnakeGame:
     food_collection = [
         {
